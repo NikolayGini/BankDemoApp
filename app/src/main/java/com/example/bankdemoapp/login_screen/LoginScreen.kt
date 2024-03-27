@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 fun LoginScreen(
     modifier: Modifier = Modifier,
     loginState: LoginState,
-    updateEmail: (String) -> Unit,
-    updatePassword: (String) -> Unit,
+    onEmailChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
     onToLogoutScreenButtonClick: () -> Unit,
 ) {
     Column(
@@ -37,10 +37,10 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         LoginForm(
-            emailState = loginState.email,
-            passwordState = loginState.password,
-            updateEmail = updateEmail,
-            updatePassword = updatePassword,
+            email = loginState.email,
+            password = loginState.password,
+            onEmailChanged = onEmailChanged,
+            onPasswordChanged = onPasswordChanged,
             onToLogoutScreenButtonClick = onToLogoutScreenButtonClick
         )
     }
@@ -49,22 +49,22 @@ fun LoginScreen(
 @Composable
 private fun LoginForm(
     modifier: Modifier = Modifier,
-    emailState: String,
-    passwordState: String,
-    updateEmail: (String) -> Unit,
-    updatePassword: (String) -> Unit,
+    email: String,
+    password: String,
+    onEmailChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
     onToLogoutScreenButtonClick: () -> Unit,
 ) {
     Column(modifier = modifier.wrapContentSize()) {
         EmailField(
-            email = emailState,
-            onEmailChanged = updateEmail
+            email = email,
+            onEmailChanged = onEmailChanged
         )
 
         PasswordField(
             modifier = Modifier.padding(top = 24.dp),
-            password = passwordState,
-            onPasswordChanged = updatePassword
+            password = password,
+            onPasswordChanged = onPasswordChanged
         )
 
         FormButton(
@@ -152,18 +152,21 @@ fun FormButtonPreview() {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PreviewLoginScreen() {
-    val email = "dang@gini-apps.com"
-    val password = "13414"
     val loginState by remember {
-        mutableStateOf(LoginState(email, password))
+        mutableStateOf(
+            LoginState(
+                email = "dang@gini-apps.com",
+                password = "password"
+            )
+        )
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         LoginScreen(
             modifier = Modifier.align(Alignment.Center),
             loginState = loginState,
-            updateEmail = { },
-            updatePassword = { },
+            onEmailChanged = { },
+            onPasswordChanged = { },
             onToLogoutScreenButtonClick = { }
         )
     }

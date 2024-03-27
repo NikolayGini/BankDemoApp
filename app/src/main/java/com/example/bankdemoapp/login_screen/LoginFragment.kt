@@ -19,8 +19,8 @@ class LoginFragment : Fragment(R.layout.content) {
         view.findViewById<ComposeView>(R.id.compose_view).setContent {
             LoginScreen(
                 loginState = viewModel.state.collectAsState().value,
-                updateEmail = { viewModel.sendEvent(event = LoginState.Event.EmailChanged(value = it)) },
-                updatePassword = { viewModel.sendEvent(event = LoginState.Event.PasswordChanged(value = it)) },
+                onEmailChanged = { viewModel.sendEvent(event = LoginState.Event.EmailChanged(value = it)) },
+                onPasswordChanged = { viewModel.sendEvent(event = LoginState.Event.PasswordChanged(value = it)) },
                 onToLogoutScreenButtonClick = ::navigateToLogoutScreen
             )
         }
