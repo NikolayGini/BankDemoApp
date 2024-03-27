@@ -1,19 +1,20 @@
 package com.example.bankdemoapp.login_screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,40 +25,76 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LoginScreen(
-    loginState: State<LoginState>,
+    modifier: Modifier = Modifier,
+    loginState: LoginState,
     updateEmail: (email: String) -> Unit,
     updatePassword: (email: String) -> Unit,
     onToLogoutScreenButtonClick: () -> Unit,
 ) {
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        when (val state = loginState.value) {
-            is LoginState.ValuesUpdated -> {
-                ValuesState(
-                    emailState = state.email,
-                    passwordState = state.password,
-                    updateEmail = updateEmail,
-                    updatePassword = updatePassword,
-                    onToLogoutScreenButtonClick = onToLogoutScreenButtonClick
-                )
-            }
-        }
+        LoginForm(
+            emailState = loginState.email,
+            passwordState = loginState.password,
+            updateEmail = updateEmail,
+            updatePassword = updatePassword,
+            onToLogoutScreenButtonClick = onToLogoutScreenButtonClick
+        )
     }
 }
 
 @Composable
-private fun ValuesState(
+private fun LoginForm(
+    modifier: Modifier = Modifier,
     emailState: String,
     passwordState: String,
     updateEmail: (email: String) -> Unit,
     updatePassword: (email: String) -> Unit,
     onToLogoutScreenButtonClick: () -> Unit,
 ) {
-    TextField(value = emailState, onValueChange = updateEmail)
+    Column(modifier = modifier.wrapContentSize()) {
+        EmailField(
+            email = emailState,
+            onEmailChanged = updateEmail
+        )
 
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+        PasswordField(
+            password = passwordState,
+            onPasswordChanged = updatePassword
+        )
+
+        FormButton(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            onToLogoutScreenButtonClick()
+        }
+    }
+}
+
+@Composable
+fun EmailField(
+    modifier: Modifier = Modifier,
+    email: String,
+    onEmailChanged: (String) -> Unit
+) {
+    TextField(
+        modifier = modifier,
+        value = email,
+        onValueChange = onEmailChanged,
+        label = { Text(text = "Email") },
+        singleLine = true,
+        placeholder = { Text(text = "Enter email address") }
+    )
+}
+
+@Composable
+fun PasswordField(
+    modifier: Modifier = Modifier,
+    password: String,
+    onPasswordChanged: (String) -> Unit
+) {
+    val passwordVisible by rememberSaveable { mutableStateOf(false) }
     val visualTransformation = if (passwordVisible) {
         VisualTransformation.None
     } else {
@@ -65,19 +102,25 @@ private fun ValuesState(
     }
 
     TextField(
-        modifier = Modifier.padding(top = 24.dp),
-        value = passwordState,
-        onValueChange = updatePassword,
+        modifier = modifier.padding(top = 24.dp),
+        value = password,
+        onValueChange = onPasswordChanged,
         label = { Text("Password") },
         singleLine = true,
-        placeholder = { Text("Password") },
+        placeholder = { Text("Enter password") },
         visualTransformation = visualTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
     )
+}
 
+@Composable
+fun FormButton(
+    modifier: Modifier = Modifier,
+    onButtonClicked: () -> Unit
+) {
     Button(
-        modifier = Modifier.padding(top = 60.dp),
-        onClick = onToLogoutScreenButtonClick,
+        modifier = modifier.padding(top = 32.dp),
+        onClick = onButtonClicked,
     ) {
         Text("login")
     }
@@ -86,7 +129,19 @@ private fun ValuesState(
 @Preview
 @Composable
 fun PreviewLoginScreen() {
-    val email = remember { mutableStateOf(value = "nikolayk@gini") }
-    val password = remember { mutableStateOf(value = "13414") }
+    val email = "nikolayk@gini"
+    val password = "13414"
+    val loginState by remember {
+        mutableStateOf(LoginState(email, password))
+    }
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        LoginScreen(
+            modifier = Modifier.align(Alignment.Center),
+            loginState = loginState,
+            updateEmail = { },
+            updatePassword = { },
+            onToLogoutScreenButtonClick = { }
+        )
+    }
 }
