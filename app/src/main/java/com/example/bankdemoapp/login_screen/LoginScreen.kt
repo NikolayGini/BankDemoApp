@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 fun LoginScreen(
     modifier: Modifier = Modifier,
     loginState: LoginState,
-    updateEmail: (email: String) -> Unit,
-    updatePassword: (email: String) -> Unit,
+    updateEmail: (String) -> Unit,
+    updatePassword: (String) -> Unit,
     onToLogoutScreenButtonClick: () -> Unit,
 ) {
     Column(
@@ -51,8 +51,8 @@ private fun LoginForm(
     modifier: Modifier = Modifier,
     emailState: String,
     passwordState: String,
-    updateEmail: (email: String) -> Unit,
-    updatePassword: (email: String) -> Unit,
+    updateEmail: (String) -> Unit,
+    updatePassword: (String) -> Unit,
     onToLogoutScreenButtonClick: () -> Unit,
 ) {
     Column(modifier = modifier.wrapContentSize()) {
@@ -62,11 +62,16 @@ private fun LoginForm(
         )
 
         PasswordField(
+            modifier = Modifier.padding(top = 24.dp),
             password = passwordState,
             onPasswordChanged = updatePassword
         )
 
-        FormButton(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+        FormButton(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 32.dp)
+        ) {
             onToLogoutScreenButtonClick()
         }
     }
@@ -102,7 +107,7 @@ fun PasswordField(
     }
 
     TextField(
-        modifier = modifier.padding(top = 24.dp),
+        modifier = modifier,
         value = password,
         onValueChange = onPasswordChanged,
         label = { Text("Password") },
@@ -119,17 +124,35 @@ fun FormButton(
     onButtonClicked: () -> Unit
 ) {
     Button(
-        modifier = modifier.padding(top = 32.dp),
+        modifier = modifier,
         onClick = onButtonClicked,
     ) {
         Text("login")
     }
 }
 
-@Preview
+@Preview(showBackground = true)
+@Composable
+fun EmailFieldPreview() {
+    EmailField(email = "dang@gini-apps.com") { }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PasswordFieldPreview() {
+    PasswordField(password = "password") { }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FormButtonPreview() {
+    FormButton { }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PreviewLoginScreen() {
-    val email = "nikolayk@gini"
+    val email = "dang@gini-apps.com"
     val password = "13414"
     val loginState by remember {
         mutableStateOf(LoginState(email, password))
