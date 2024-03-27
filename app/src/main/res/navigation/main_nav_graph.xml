@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/logOutFragment"
-        android:name="com.example.bankdemoapp.loguout_screen.LogOutFragment"
+        android:name="com.example.bankdemoapp.logout_screen.LogOutFragment"
         android:label="LogOutFragment" />
     <fragment
         android:id="@+id/splashFragment"

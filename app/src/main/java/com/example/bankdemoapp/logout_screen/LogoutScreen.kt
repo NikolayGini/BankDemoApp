@@ -1,4 +1,4 @@
-package com.example.bankdemoapp.loguout_screen
+package com.example.bankdemoapp.logout_screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

@@ -1,4 +1,4 @@
-package com.example.bankdemoapp.loguout_screen
+package com.example.bankdemoapp.logout_screen
 
 import android.os.Bundle
 import android.view.View
